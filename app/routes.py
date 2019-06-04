@@ -16,7 +16,7 @@ def hourly_data():
 
     fatal_hour_json = fatal_hour.to_json(orient='records')
 
-    return jsonify(fatal_hour_json)
+    return fatal_hour_json
 
 @app.route('/monthly_data')
 def monthly_data():
@@ -28,7 +28,7 @@ def monthly_data():
     fatal_month = fatal_month.groupby('Month_of_Accident').agg('sum')
     fatal_month = fatal_month.reset_index()
     
-    fatal_month_json = fatal_month.to_json(orient='records')
+    fatal_month_json = fatal_month.to_dict(orient='records')
 
     return jsonify(fatal_month_json)
 
