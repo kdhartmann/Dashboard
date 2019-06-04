@@ -15,75 +15,8 @@
 </style>
 <body>
    	
-	<script src="https://d3js.org/d3.v4.min.js"></script>
-	<script>
-	// data is fed in as a json from routes.py
-	// code I was looking at: https://bl.ocks.org/basilesimon/29efb0e0a43dde81985c20d9a862e34e
-	var margin = {top: 20, right: 20, bottom: 30, left: 50},
-    	width = 960 - margin.left - margin.right,
-    	height = 500 - margin.top - margin.bottom;
-
-	var x = d3.scaleTime().range([0, width]);
-	var y = d3.scaleLinear().range([height, 0]);
-
-	var valueline = d3.line()
-    	.x(function(d) { return x(d.Month_of_Accident); })
-    	.y(function(d) { return y(d.Total_Number_of_Casualties); });
-
-	var valueline2 = d3.line()
-    	.x(function(d) { return x(d.Month_of_Accident); })
-    	.y(function(d) { return y(d.Fatal_Casualties); });
-  
-	var svg = d3.select("body").append("svg")
-    	.attr("width", width + margin.left + margin.right)
-    	.attr("height", height + margin.top + margin.bottom)
-  	  .append("g")
-    	.attr("transform","translate(" + margin.left + "," + margin.top + ")");
-
-    // sort by month
-  	function sortByMonth(arr) {
-  		var months = ["January", "February", "March", "April", "May", "June",
-  	        "July", "August", "September", "October", "November", "December"];
-  		arr.sort(function(a, b){return months.indexOf(a.values.Month.displayValue)- months.indexOf(b.values.Month.displayValue);
-  				});
-	}
-
-	function draw(data) {
-  
-  		// format the data
-  		data.forEach(function(d) {
-      		d.Month_of_Accident = sortByMonth(d.Month_of_Accident);
-      		d.Total_Number_of_Casualties = +d.Total_Number_of_Casualties;
-      		d.Fatal_Casualties = +d.Fatal_Casualties;
-  	});
-  
- 
-  	x.domain(d3.extent(data, function(d) { return d.Month_of_Accident; }));
-  	y.domain([0, d3.max(data, function(d) {return Math.max(d.Total_Number_of_Casualties, d.Fatal_Casualties; })]);
-  
-  	// Add the valueline path.
-  	svg.append("path")
-      	.data([data])
-      	.attr("class", "line")
-      	.attr("d", valueline);
-  	// Add the valueline path.
-  	svg.append("path")
-      	.data([data])
-      	.attr("class", "line")
-      	.attr("d", valueline2);  
-  	// Add the X Axis
-  	svg.append("g")
-      	.attr("transform", "translate(0," + height + ")")
-      	call(d3.axisBottom(x));
-
-  	// Add the Y Axis
-  	svg.append("g")
-      	.call(d3.axisLeft(y));
-  	}
-
- 	draw(data);
-
-
-</script>
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+	<!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
+	<script type="text/javascript" src="{{url_for('static', filename='js/deaths.js')}}"></script>
 </body>
 {% endblock %}
