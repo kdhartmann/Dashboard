@@ -25,7 +25,7 @@ async function renderFatalityType(){
   var y = d3.scaleLinear()
   .rangeRound([height, 0]);
  
-  x.domain(d3.extent(data.map(d => d.Fatal_Casualty_Type)));
+  x.domain(data.map(d => d.Fatal_Casualty_Type));
   y.domain([0, d3.max(data.map(d => d.Count))]);
 
   svg.append("g")
