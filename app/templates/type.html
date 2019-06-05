@@ -1,9 +1,57 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<head>
+    <title>Age and Fatal Casualty Types</title>
+</head>
+<body>
     <h2><p style = "font-family:arial">Age and Fatal Casualty Types</p></h2>
+
     <p style = "font-family:arial">
     Three plots will be on this page!
-
 	</p>
+<p>Select an option:</p>
+    <form name="myForm">
+    <input type="radio" name="myRadios"  value="all" >All</value>
+    <input type="radio" name="myRadios"  value="male" >Male</value>
+    <input type="radio" name="myRadios"  value="female" >Female</value>
+</form>
+Gender: <span id="gender"></span>
+Source: <span id="source"></span>
+</body>
+<script type="text/javascript">
+var genderField = document.getElementById('gender');
+var sourceField = document.getElementById('source');
+var rad = document.myForm.myRadios;
+var prev = null;
+for(var i = 0; i < rad.length; i++) {
+    rad[i].onclick = function() {
+        console.log(this.value);
+        if(this !== prev) {
+            prev = this;
+            string = this.value;
+            genderField.textContent = string;
+            if (string ==='all'){
+                src = "{{url_for('static', filename='js/fatal_type.js')}}";
+            }else if (string ==='female'){
+                src = "{{url_for('static', filename='js/age_fatal_count.js')}}";
+            }else{
+                src = "{{url_for('static', filename='js/fatality_type_by_age.js')}}";
+            };
+            sourceField.textContent = src;
+        };
+    };
+};
+</script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <!-- something comes up but not correctly -->
+    <script type="text/javascript" src="{{url_for('static', filename='js/fatal_type.js')}}"></script>
+
+    <script type="text/javascript" src="{{url_for('static', filename='js/age_fatal_count.js')}}"></script>
+
+
+    <script type="text/javascript" src="{{url_for('static', filename='js/fatality_type_by_age.js')}}"></script>
+
+
 {% endblock %}

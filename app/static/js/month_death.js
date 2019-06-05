@@ -1,19 +1,9 @@
-console.log("Hello Death")
+async function renderMonthly(){
 
-// Method 1
-d3.json("hourly_data").then(data => {
-    // console.log(data)
-  }
-)
-
-
-// Method 2
-async function renderHourly(){
-
-  const data = await d3.json("hourly_data");
+  const data = await d3.json("monthly_data");
 
   data.forEach(function(d) {
-    d.Hour_of_Accident = +d.Hour_of_Accident;
+    d.Month = +d.Month;
     d.Total_Number_of_Casualties = +d.Total_Number_of_Casualties;
     d.Fatal_Casualties = +d.Fatal_Casualties;
 
@@ -27,11 +17,11 @@ async function renderHourly(){
   var y = d3.scaleLinear().range([height, 0]);
 
   var valueline = d3.line()
-    .x(function(d) { return x(d.Hour_of_Accident); })
+    .x(function(d) { return x(d.Month); })
     .y(function(d) { return y(d.Total_Number_of_Casualties); });
 
   var valueline2 = d3.line()
-    .x(function(d) { return x(d.Hour_of_Accident); })
+    .x(function(d) { return x(d.Month); })
     .y(function(d) { return y(d.Fatal_Casualties); });
 
   var svg = d3.select("body").append("svg")
@@ -40,7 +30,7 @@ async function renderHourly(){
     .append("g")
     .attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
-  x.domain(d3.extent(data.map(d => d.Hour_of_Accident)));
+  x.domain(d3.extent(data.map(d => d.Month)));
   y.domain([0, d3.max(data.map(d => d.Total_Number_of_Casualties))]);
 
   // Add the valueline path.
@@ -68,7 +58,7 @@ async function renderHourly(){
     .call(d3.axisLeft(y));
 
   svg.append("text")
-    .attr("transform", "translate("+(width-70)+","+y(875)+")")
+    .attr("transform", "translate("+(width-70)+","+y(1500)+")")
     .attr("dy", ".35em")
     .attr("font-size", "12px")
     .attr("font-family", "arial")
@@ -77,35 +67,31 @@ async function renderHourly(){
     .text("Total Casualties");
 
   svg.append("text")
-    .attr("transform", "translate("+(width-60)+","+y(500)+")")
+    .attr("transform", "translate("+(width-60)+","+y(875)+")")
     .attr("dy", ".35em")
     .attr("font-size", "12px")
     .attr("font-family", "arial")
     .attr("text-anchor", "start")
     .style("fill", "red")
     .text("Total Fatalities");
-  // title
+
   svg.append("text")
-    .attr("transform", "translate("+(0)+","+y(1100)+")")
+    .attr("transform", "translate("+(0)+","+y(1550)+")")
     .attr("dy", ".35em")
     .attr("font-size", "15px")
     .attr("font-family", "arial")
     .attr("text-anchor", "start")
     .style("fill", "black")
-    .text("Total Number of Casualties and Fatalities by Hour of Day");
-  // x-axis label
+    .text("Total Number of Casualties and Fatalities by Month");
+
   svg.append("text")
-    .attr("transform", "translate("+(175)+","+y(-120)+")")
+    .attr("transform", "translate("+(200)+","+y(-175)+")")
     .attr("dy", ".35em")
     .attr("font-size", "12px")
     .attr("font-family", "arial")
     .attr("text-anchor", "start")
     .style("fill", "black")
-    .text("Hour of Day");
-
+    .text("Month");
 }
 
-renderHourly()
-
-
-
+renderMonthly()
