@@ -5,6 +5,27 @@
 <head>
     <title>Age and Fatal Casualty Types</title>
 </head>
+<style>
+    .bar {
+      fill: steelblue;}
+
+    .bar:hover {
+      fill: brown;}
+
+    .axis--x path {
+        display: none;}
+
+    .toolTip {
+         position: absolute;
+         display: none;
+         min-width: 80px;
+         height: auto;
+         background: none repeat scroll 0 0 #ffffff;
+         border: 1px solid #6F257F;
+         padding: 14px;
+         text-align: center;}
+
+</style>
 <body>
     <h2><p style = "font-family:arial">Age and Fatal Casualty Types</p></h2>
 
@@ -45,13 +66,14 @@ for(var i = 0; i < rad.length; i++) {
 };
 </script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
+
     <!-- something comes up but not correctly -->
     <script type="text/javascript" src="{{url_for('static', filename='js/fatal_type.js')}}"></script>
 
-    <script type="text/javascript" src="{{url_for('static', filename='js/age_fatal_count.js')}}"></script>
+    <!-- <script type="text/javascript" src="{{url_for('static', filename='js/age_fatal_count.js')}}"></script> -->
 
 
-    <script type="text/javascript" src="{{url_for('static', filename='js/fatality_type_by_age.js')}}"></script>
+    <!-- <script type="text/javascript" src="{{url_for('static', filename='js/fatality_type_by_age.js')}}"></script> -->
 
 
 {% endblock %}

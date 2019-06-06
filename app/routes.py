@@ -44,6 +44,7 @@ def fatality_type():
     fatal_type = fatal_type.rename(index=str, columns={"Fatal_Accident_Index": "Count"})
     fatal_type = fatal_type.sort_values(by=['Count'], ascending=False)
     fatal_type = fatal_type.reset_index()
+    fatal_type['Fatal_Casualty_Type'] = fatal_type.Fatal_Casualty_Type.astype(str)
     fatal_type_json = fatal_type.to_json(orient='records')
 
     return fatal_type_json
