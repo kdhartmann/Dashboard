@@ -8,17 +8,13 @@
 <style>
     .bar {
       fill: steelblue;}
-
     .bar:hover {
       fill: indianRed;}
-
     .axis--x path {
         display: none;}
-
     .axis text {
                 font-family: sans-serif;
                 font-size: 6px;}
-
     .toolTip {
          position: absolute;
          display: none;
@@ -28,7 +24,6 @@
          border: 1px solid #6F257F;
          padding: 5px;
          text-align: center;}
-
 </style>
 <body>
     <h2><p style = "font-family:arial">Age and Fatal Casualty Types</p></h2>
@@ -49,7 +44,7 @@
         </div>
     <p style = "font-family:arial">
     Three plots will be on this page!
-	</p>
+    </p>
     <form name="myForm">
     <input type="radio" name="myRadios"  value="all" >All</value>
     <input type="radio" name="myRadios"  value="male" >Male</value>
@@ -90,7 +85,7 @@ for(var i = 0; i < rad.length; i++) {
     <script type="text/javascript" src="{{url_for('static', filename='js/age_fatal_count.js')}}"></script>
 
 
-    <!-- <script type="text/javascript" src="{{url_for('static', filename='js/fatality_type_by_age.js')}}"></script> -->
+    <script type="text/javascript" src="{{url_for('static', filename='js/fatality_type_by_age.js')}}"></script>
 
 
 {% endblock %}

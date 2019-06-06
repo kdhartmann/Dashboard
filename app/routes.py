@@ -96,7 +96,7 @@ def trends():
 
 @app.route('/type')
 def age_fatality_type():
-	return render_template("type.html", title = "Age and Fatality Casualty Types")
+    return render_template("type.html", title = "Age and Fatality Casualty Types")
 
 if __name__ == '__main__':
     app.run(debug=True)
