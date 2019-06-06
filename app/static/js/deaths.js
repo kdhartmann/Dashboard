@@ -43,6 +43,8 @@ async function renderHourly(){
   x.domain(d3.extent(data.map(d => d.Hour_of_Accident)));
   y.domain([0, d3.max(data.map(d => d.Total_Number_of_Casualties))]);
 
+  var tooltip = d3.select("body").append("div").attr("class", "toolTip");
+
   // Add the valueline path.
   svg.append("path")
     .data([data])
@@ -50,13 +52,45 @@ async function renderHourly(){
     .style("stroke", "steelblue")
     .attr("class", "line")
     .attr("d", valueline);
+    
   // Add the valueline path.
+
+svg.selectAll(".dot")
+    .data(data)
+  .enter().append("circle") // Uses the enter().append() method
+    .attr("class", "dot") // Assign a class for styling
+    .attr("cx", function(d, i) { return x(d.Hour_of_Accident) })
+    .attr("cy", function(d) { return y(d.Total_Number_of_Casualties) })
+    .attr("r", 3)
+    .on("mousemove", function(d){
+            tooltip
+              .style("left", d3.event.pageX - 50 + "px")
+              .style("top", d3.event.pageY - 70 + "px")
+              .style("display", "inline-block")
+              .html("Hour: " + (d.Hour_of_Accident) + "<br>Casualties: " + (d.Total_Number_of_Casualties));})
+      .on("mouseout", function(d){ tooltip.style("display", "none");});
+
   svg.append("path")
     .data([data])
     .style("fill", "none")
     .style("stroke", "red")
     .attr("class", "line")
-    .attr("d", valueline2); 
+    .attr("d", valueline2);
+
+  svg.selectAll(".dot2")
+    .data(data)
+  .enter().append("circle") // Uses the enter().append() method
+    .attr("class", "dot2") // Assign a class for styling
+    .attr("cx", function(d, i) { return x(d.Hour_of_Accident) })
+    .attr("cy", function(d) { return y(d.Fatal_Casualties) })
+    .attr("r", 3)
+    .on("mousemove", function(d){
+            tooltip
+              .style("left", d3.event.pageX - 50 + "px")
+              .style("top", d3.event.pageY - 70 + "px")
+              .style("display", "inline-block")
+              .html("Hour: " + (d.Hour_of_Accident) + "<br>Fatalities: " + (d.Fatal_Casualties));})
+      .on("mouseout", function(d){ tooltip.style("display", "none");}); 
   
   // Add the X Axis
   svg.append("g")

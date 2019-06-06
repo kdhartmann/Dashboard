@@ -45,6 +45,7 @@ def fatality_type():
     fatal_type = fatal_type.sort_values(by=['Count'], ascending=False)
     fatal_type = fatal_type.reset_index()
     fatal_type['Fatal_Casualty_Type'] = fatal_type.Fatal_Casualty_Type.astype(str)
+    fatal_type = fatal_type.replace('_', ' ', regex=True)
     fatal_type_json = fatal_type.to_json(orient='records')
 
     return fatal_type_json
@@ -77,6 +78,7 @@ def fatality_type_by_age():
     fatal_age.drop(fatal_age.tail(1).index,inplace=True)
     fatal_age['Fatal_Casualty_Age'] = fatal_age.Fatal_Casualty_Age.astype(int)
     fatal_age = fatal_age.sort_values(by=['Fatal_Casualty_Age'], ascending=True)
+    fatal_age = fatal_age.replace('_', ' ', regex=True)
     fatal_age_json = fatal_age.to_json(orient='records')
 
     return fatal_age_json

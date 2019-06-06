@@ -1,7 +1,36 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+	.dot {
+    	fill: steelblue;
+    	stroke: #fff;}
 
+    .dot:hover {
+      fill: indianRed;}
+
+    .dot2 {
+    	fill: red;
+    	stroke: #fff;}
+
+    .dot2:hover {
+      fill: indianRed;}
+  
+  	.focus circle {
+  		fill: none;
+  		stroke: steelblue;}
+
+	.toolTip {
+        position: absolute;
+        display: none;
+        min-width: 50px;
+        height: auto;
+        background: none repeat scroll 0 0 #ffffff;
+        border: 1px solid #6F257F;
+        padding: 5px;
+        text-align: center;}
+
+</style>
 <head>
     <title>Monthly and Hourly Trends</title>
 </head>

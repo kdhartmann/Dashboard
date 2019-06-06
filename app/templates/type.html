@@ -10,36 +10,53 @@
       fill: steelblue;}
 
     .bar:hover {
-      fill: brown;}
+      fill: indianRed;}
 
     .axis--x path {
         display: none;}
 
+    .axis text {
+                font-family: sans-serif;
+                font-size: 6px;}
+
     .toolTip {
          position: absolute;
          display: none;
-         min-width: 80px;
+         min-width: 50px;
          height: auto;
          background: none repeat scroll 0 0 #ffffff;
          border: 1px solid #6F257F;
-         padding: 14px;
+         padding: 5px;
          text-align: center;}
 
 </style>
 <body>
     <h2><p style = "font-family:arial">Age and Fatal Casualty Types</p></h2>
-
+     <p style = "font-family:arial"> Select an option:</p>
+    <div class = "container-fluid">
+            <!-- Intro button -->
+            <a href="/introduction"><button type="radio" class="btn btn-primary" aria-label="Left Align">
+                <span class="glyphicon glyphicon-off" aria-hidden="true"></span> All 
+            </button></a>
+            <!-- Trends button -->
+            <a href="/trends"><button type="radio" class="btn btn-primary" aria-label="Right Align">
+                <span class="glyphicon glyphicon-off" aria-hidden="true"></span> Male 
+            </button></a>
+            <!-- Type button -->
+            <a href="/type"><button type="radio" class="btn btn-primary" aria-label="Left Align">
+                <span class="glyphicon glyphicon-off" aria-hidden="true"></span> Female 
+            </button></a>
+        </div>
     <p style = "font-family:arial">
     Three plots will be on this page!
 	</p>
-<p>Select an option:</p>
     <form name="myForm">
     <input type="radio" name="myRadios"  value="all" >All</value>
     <input type="radio" name="myRadios"  value="male" >Male</value>
     <input type="radio" name="myRadios"  value="female" >Female</value>
 </form>
 Gender: <span id="gender"></span>
-Source: <span id="source"></span>
+Analysis: <span id="source"></span>
 </body>
 <script type="text/javascript">
 var genderField = document.getElementById('gender');
@@ -54,13 +71,13 @@ for(var i = 0; i < rad.length; i++) {
             string = this.value;
             genderField.textContent = string;
             if (string ==='all'){
-                src = "{{url_for('static', filename='js/fatal_type.js')}}";
+                text = "Text here describing all graphs ";
             }else if (string ==='female'){
-                src = "{{url_for('static', filename='js/age_fatal_count.js')}}";
+                text = "Text here describing female graphs";
             }else{
-                src = "{{url_for('static', filename='js/fatality_type_by_age.js')}}";
+                text = "Text here describing male graphs ";
             };
-            sourceField.textContent = src;
+            sourceField.textContent = text;
         };
     };
 };
@@ -70,7 +87,7 @@ for(var i = 0; i < rad.length; i++) {
     <!-- something comes up but not correctly -->
     <script type="text/javascript" src="{{url_for('static', filename='js/fatal_type.js')}}"></script>
 
-    <!-- <script type="text/javascript" src="{{url_for('static', filename='js/age_fatal_count.js')}}"></script> -->
+    <script type="text/javascript" src="{{url_for('static', filename='js/age_fatal_count.js')}}"></script>
 
 
     <!-- <script type="text/javascript" src="{{url_for('static', filename='js/fatality_type_by_age.js')}}"></script> -->
