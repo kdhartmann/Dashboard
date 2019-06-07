@@ -1,7 +1,9 @@
 from flask import Flask, render_template, jsonify
+from flask_bootstrap import Bootstrap
 import pandas as pd
 
 app = Flask(__name__)
+# Bootstrap(app)
 
 ### APIs
 @app.route('/hourly_data')

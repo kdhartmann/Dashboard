@@ -7,8 +7,8 @@ async function renderFatalityType(){
   });
   
 
-  var margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = 500 - margin.left - margin.right,
+  var margin = {top: 20, right: 20, bottom: 35, left: 50},
+    width = 700 - margin.left - margin.right,
     height = 250 - margin.top - margin.bottom;
 
   var x = d3.scaleBand().rangeRound([0, width]).padding(.1);
@@ -53,6 +53,7 @@ async function renderFatalityType(){
     .attr("transform", "translate(0," + (height ) + ")")
     .call(d3.axisBottom(x))
     .selectAll(".tick text")
+      .style("font-size", "8px")
       .call(wrap, x.bandwidth());
 
   // svg.selectAll(".xaxis text")  // select all the text elements for the xaxis

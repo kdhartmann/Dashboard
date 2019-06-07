@@ -1,3 +1,12 @@
+const buttons = d3.selectAll('input');
+let selection;
+buttons.on('change', function(d) {
+  selection = this.value;
+  console.log('button changed to ' + this.value);
+});
+
+
+
 async function renderAgeFatalCount(){
 
   const data = await d3.json("age_fatal_count");
@@ -52,7 +61,10 @@ async function renderAgeFatalCount(){
   svg.append("g")
     .attr("class", "xaxis axis")
     .attr("transform", "translate(0," + height  + ")")
-    .call(d3.axisBottom(x));
+    .call(d3.axisBottom(x)
+          .tickValues([0,10,20,30,40,50,60,70,80,90]))
+    .selectAll(".tick text")
+      .style("font-size", "9px");
 
   // Add the Y Axis
   svg.append("g")
