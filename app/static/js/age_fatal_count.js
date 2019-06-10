@@ -31,7 +31,7 @@ var svg2 = d3.select("body").append("svg")
     .attr("transform","translate(" + margin2.left + "," + margin2.top + ")");
 
 
-//// FATALITY TYPE BY COUNT
+//// FATALITY TYPE BY COUNT: SVG3
 
 var margin3 = {top: 20, right: 20, bottom: 35, left: 50},
     width3 = 700 - margin3.left - margin3.right,
