@@ -9,7 +9,7 @@
     .bar {
       fill: steelblue;}
     .bar:hover {
-      fill: indianRed;}
+      fill: rosybrown;}
     .axis--x path {
         display: none;}
     .axis text {
@@ -29,9 +29,9 @@
     <h2><p style = "font-family:arial">Age and Fatal Casualty Types</p></h2>
      <p style = "font-family:arial"> Select an option:</p>
     <form name="myForm">
-    <input type="radio" name="myRadios"  value="all" >All</value>
-    <input type="radio" name="myRadios"  value="male" >Male</value>
-    <input type="radio" name="myRadios"  value="female" >Female</value>
+    <input type="radio" name="myRadios"  value="All" >All</value>
+    <input type="radio" name="myRadios"  value="Male" >Male</value>
+    <input type="radio" name="myRadios"  value="Female" >Female</value>
 </form>
 Analysis: <span id="source"></span>
 </body>
@@ -58,13 +58,12 @@ for(var i = 0; i < rad.length; i++) {
 </script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
 
-    <!-- something comes up but not correctly -->
-    <script type="text/javascript" src="{{url_for('static', filename='js/fatal_type.js')}}"></script>
+    <!-- <script type="text/javascript" src="{{url_for('static', filename='js/fatal_type.js')}}"></script> -->
 
     <script type="text/javascript" src="{{url_for('static', filename='js/age_fatal_count.js')}}"></script>
 
 
-    <script type="text/javascript" src="{{url_for('static', filename='js/fatality_type_by_age.js')}}"></script>
+    <!-- <script type="text/javascript" src="{{url_for('static', filename='js/fatality_type_by_age.js')}}"></script> -->
 
 
 {% endblock %}
