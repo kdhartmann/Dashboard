@@ -32,7 +32,7 @@
     <input type="radio" name="myRadios"  value="All" >All</value>
     <input type="radio" name="myRadios"  value="Male" >Male</value>
     <input type="radio" name="myRadios"  value="Female" >Female</value>
-</form>
+    </form>
 Analysis: <span id="source"></span>
 </body>
 <script type="text/javascript">
@@ -56,14 +56,11 @@ for(var i = 0; i < rad.length; i++) {
     };
 };
 </script>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
 
-    <!-- <script type="text/javascript" src="{{url_for('static', filename='js/fatal_type.js')}}"></script> -->
-
-    <script type="text/javascript" src="{{url_for('static', filename='js/age_fatal_count.js')}}"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
 
 
-    <!-- <script type="text/javascript" src="{{url_for('static', filename='js/fatality_type_by_age.js')}}"></script> -->
+<script type="text/javascript" src="{{url_for('static', filename='js/type.js')}}"></script>
 
 
 {% endblock %}

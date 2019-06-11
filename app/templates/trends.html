@@ -2,33 +2,33 @@
 
 {% block content %}
 <style>
-	.dot {
-    	fill: steelblue;
-    	stroke: #fff;}
+  .dotCasualties {
+    fill: steelblue;
+    stroke: #fff;}
 
-    .dot:hover {
-      fill: indianRed;}
+  .dotCasualties:hover {
+    fill: indianRed;}
 
-    .dot2 {
-    	fill: red;
-    	stroke: #fff;}
+  .dotFatalities {
+    fill: red;
+    stroke: #fff;}
 
-    .dot2:hover {
-      fill: indianRed;}
+  .dotFatalities:hover {
+    fill: indianRed;}
   
-  	.focus circle {
-  		fill: none;
-  		stroke: steelblue;}
+  .focus circle {
+  	fill: none;
+    stroke: steelblue;}
 
 	.toolTip {
-        position: absolute;
-        display: none;
-        min-width: 50px;
-        height: auto;
-        background: none repeat scroll 0 0 #ffffff;
-        border: 1px solid #6F257F;
-        padding: 5px;
-        text-align: center;}
+    position: absolute;
+    display: none;
+    min-width: 50px;
+    height: auto;
+    background: none repeat scroll 0 0 #ffffff;
+    border: 1px solid #6F257F;
+    padding: 5px;
+    text-align: center;}
 
 </style>
 <head>
@@ -36,18 +36,16 @@
 </head>
 <body>
 	<h2><p style = "font-family:arial"> Monthly and Hourly Trends</p> </h2>
-	<script src="https://d3js.org/d3.v5.min.js"></script>
 
-	<script type="text/javascript" src="{{url_for('static', filename='js/month_death.js')}}"></script>
-</body>
-<body>
 	<p style = "font-family:arial"> Test text to see where this shows up: The United Kingdom's Department for Transport reported 7,981 fatal road accidents in Great Britain from 2006 to 2008. These reports consist of two datasets: one involving information about the accident and the other holds the details of the fatal casualty. This dashboard contains visualizations and analysis for the monthly and hourly accident occurance, age and gender of fatality, and fatality types. 
 
+  Click the "Monthly and Hourly Trends" or "Age and Fatal Casualty Type" tabs to continue. </p>
 
-    	Click the "Monthly and Hourly Trends" or "Age and Fatal Casualty Type" tabs to continue.
-</body>
-<body>
-	<script type="text/javascript" src="{{url_for('static', filename='js/deaths.js')}}"></script>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+
+  <script type="text/javascript" src="{{url_for('static', filename='js/monthlyTrend.js')}}"></script>
+
+	<script type="text/javascript" src="{{url_for('static', filename='js/hourlyTrend.js')}}"></script>
 
 </body>
 {% endblock %}
