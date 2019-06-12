@@ -34,12 +34,14 @@
     <input type="radio" name="myRadios"  value="Female" >Female</value>
     </form>
 Analysis: <span id="source"></span>
+
 </body>
 <script type="text/javascript">
-var sourceField = document.getElementById('source');
-var rad = document.myForm.myRadios;
-var prev = null;
-for(var i = 0; i < rad.length; i++) {
+
+let sourceField = document.getElementById('source');
+let rad = document.myForm.myRadios;
+let prev = null;
+for(let i = 0; i < rad.length; i++) {
     rad[i].onclick = function() {
         if(this !== prev) {
             prev = this;
@@ -58,8 +60,6 @@ for(var i = 0; i < rad.length; i++) {
 </script>
 
 <script src="https://d3js.org/d3.v5.min.js"></script>
-
-
 <script type="text/javascript" src="{{url_for('static', filename='js/type.js')}}"></script>
 
 

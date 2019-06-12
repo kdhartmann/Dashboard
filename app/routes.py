@@ -52,6 +52,9 @@ def fatalityTypeCount(selection):
     fatal_type['Fatal_Casualty_Type'] = fatal_type.Fatal_Casualty_Type.astype(str)
     fatal_type = fatal_type.replace('_', ' ', regex=True)
     fatal_type = fatal_type.rename(index=str, columns={"Fatal_Casualty_Type": "fatalCasualtyType"})
+    fatal_type = fatal_type.replace('Other Vehicle Occupant', 'Other Occupant')
+    fatal_type = fatal_type.replace('Motor Cycle Passenger', 'Motorcycle Passenger')
+    fatal_type = fatal_type.replace('Motor Cycle Rider', 'Motorcycle Rider')
     fatal_type_json = fatal_type.to_json(orient='records')
 
     return fatal_type_json
@@ -94,6 +97,8 @@ def fatalTypeAge(selection):
     fatal_age = fatal_age.replace('_', ' ', regex=True)
     fatal_age = fatal_age.rename(index=str, columns={"Fatal_Casualty_Age": "age"})
     fatal_age = fatal_age.rename(index=str, columns={"Fatal_Casualty_Type": "fatalCasualtyType"})
+    fatal_age = fatal_age.replace('Other Vehicle Occupant', 'Other Occupant')
+    fatal_age = fatal_age.replace('Motor Cycle', 'Motorcycle')
     fatal_age_json = fatal_age.to_json(orient='records')
 
     return fatal_age_json

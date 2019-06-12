@@ -1,7 +1,7 @@
 const tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
 //// FATALITY COUNT BY AGE: svgFatalCountAge
-const margin = {top: 20, right: 20, bottom: 60, left: 60},
+const margin = {top: 20, right: 20, bottom: 60, left: 65},
   width = 1000 - margin.left - margin.right,
   height = 250 - margin.top - margin.bottom;
 
@@ -13,7 +13,6 @@ let svgFatalCountAge = d3.select("body").append("svg")
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
   .attr("transform",`translate(${margin.left}, ${margin.top})`);
-
 
 //// FATALITY TYPE BY AGE: svgFatalTypeAge
 
@@ -61,7 +60,7 @@ buttons.on('change', (d,i,nodes) => {
 });
 
 
-//// FATALITY COUNT BY AGE 
+//// FATALITY COUNT BY AGE: svgFatalCountAge 
 
 async function updateFatalCountAge(selection, fill){
 
@@ -76,23 +75,39 @@ async function updateFatalCountAge(selection, fill){
   xFatalCountAge.domain(data.map(d => d.age));
   yFatalCountAge.domain([0, d3.max(data.map(d => d.count))]);
 
-    // Add the X Axis
-  xAxisFatalCountAge = svgFatalCountAge.append("g")
-    .attr("class", "xaxis axis")
-    .attr("transform", `translate(0, ${height})`)
-    .call(d3.axisBottom(xFatalCountAge)
-      .tickValues([0,10,20,30,40,50,60,70,80,90]))
-    .selectAll(".tick text")
-      .style("font-size", "9px");
+  svgFatalCountAge.selectAll(".xAxisFatalCountAge").remove();
+  svgFatalCountAge.selectAll(".yAxisFatalCountAge").remove();
 
-  xAxisFatalCountAge.exit().remove();
+  // X-Axis 
+  let xAxisFatalCountAge = d3.axisBottom()
+    .scale(xFatalCountAge);
 
-  // Add the Y Axis
   svgFatalCountAge.append("g")
-    .call(d3.axisLeft(yFatalCountAge));
+    .attr("class", "xAxisFatalCountAge")
+    .attr("transform", `translate(0, ${height})`)
+    .call(xAxisFatalCountAge.tickValues([0,10,20,30,40,50,60,70,80,90]));
 
-   // title
+  svgFatalCountAge.selectAll(".xAxisFatalCountAge")
+    .transition()
+      .call(xAxisFatalCountAge.tickValues([0,10,20,30,40,50,60,70,80,90]));
+
+  // Y-Axis
+  let yAxisFatalCountAge = d3.axisLeft()
+    .scale(yFatalCountAge);
+
+  svgFatalCountAge.append("g")
+    .attr("class", "yAxisFatalCountAge")
+    .call(yAxisFatalCountAge);
+
+  svgFatalCountAge.selectAll(".yAxisFatalCountAge")
+    .transition()
+      .call(yAxisFatalCountAge);
+
+  // Title
+  svgFatalCountAge.selectAll(".title").remove();
+
   svgFatalCountAge.append("text")
+    .attr("class", "title")
     .attr("transform", `translate(2,-10)`)
     .attr("dy", ".35em")
     .attr("font-size", "12px")
@@ -100,7 +115,20 @@ async function updateFatalCountAge(selection, fill){
     .attr("text-anchor", "start")
     .style("fill", "black")
     .text(`Fatal Casualty Count by Age for ${selection}`);
+  
+  svgFatalCountAge.selectAll(".title")
+    .text(`Fatal Casualty Count by Age for ${selection}`)
+  
+  // use this for fill in mouseover
+  if (selection==="Female"){
+    selectionColor = "indianred";
+  }else if (selection==="Male"){
+    selectionColor = "steelblue";
+  } else{
+    selectionColor = "mediumseagreen";
+  };
 
+  // Bars 
   groupFatalCountAge = svgFatalCountAge
     .selectAll(".bar")
     .data(data);
@@ -122,12 +150,13 @@ async function updateFatalCountAge(selection, fill){
           .style("display", "inline-block")
           .html(`Age: ${d.age} <br>Count: ${d.count}`);})
       .on("mouseout",  (d,i,nodes) => { 
-        d3.select(nodes[i]).style("fill", fill) 
+        d3.select(nodes[i]).style("fill", selectionColor) 
         tooltip.style("display", "none");});
 
   groupFatalCountAge.transition()
     .duration(500)
     .attr("y", d => {return yFatalCountAge(d.count);})
+    .attr("x", d => {return xFatalCountAge(d.age);})
     .attr("height", d => {return height - yFatalCountAge(d.count);})
     .style("fill", fill);
 
@@ -135,7 +164,7 @@ async function updateFatalCountAge(selection, fill){
 
 } 
 
-//// FATALITY TYPE BY AGE
+//// FATALITY TYPE BY AGE: svgFatalTypeAge
 
 async function updateFatalTypeAge(selection, fill){
   data = await d3.json(`fatalTypeAge/${selection}`);
@@ -149,22 +178,44 @@ async function updateFatalTypeAge(selection, fill){
   xFatalTypeAge.domain(d3.extent(data.map(d => d.age)));
   yFatalTypeAge.domain(data.map(d => d.fatalCasualtyType));
 
-  svgFatalTypeAge.append("g")
-    .attr("class", "xaxis axis")
-    .attr("transform", `translate(0, ${height})`)
-    .call(d3.axisBottom(xFatalTypeAge))
-    .selectAll(".tick text")
-      .style("font-size", "9px");
+  svgFatalTypeAge.selectAll(".xAxisFatalTypeAge").remove();
+  svgFatalTypeAge.selectAll(".yAxisFatalTypeAge").remove();
+
+  // X-Axis
+  let xAxisFatalTypeAge = d3.axisBottom()
+    .scale(xFatalTypeAge);
 
   svgFatalTypeAge.append("g")
-    .attr("class", "xaxis axis")
-    .call(d3.axisLeft(yFatalTypeAge))
+    .attr("class", "xAxisFatalTypeAge")
+    .attr("transform", `translate(0, ${height})`)
+    .call(xAxisFatalTypeAge);
+    
+  svgFatalTypeAge.transition()
+      .call(xAxisFatalTypeAge);
+
+  //Y-Axis
+  let yAxisFatalTypeAge = d3.axisLeft()
+    .scale(yFatalTypeAge);
+
+  svgFatalTypeAge.append("g")
+    .attr("class", "yAxisFatalTypeAge")
+    .call(yAxisFatalTypeAge)
     .selectAll(".tick text")
-       .style("font-size", "8px")
-       .call(wrapYAxis, 50);
+        .style("font-size", "8px");
+
+  svgFatalTypeAge.selectAll(".yAxisFatalTypeAge")
+    .transition()
+      .call(yAxisFatalTypeAge)
+      .selectAll(".tick text")
+        .style("font-size", "8px");
+  
+  // title
+  svgFatalTypeAge.selectAll(".title").remove();
 
   svgFatalTypeAge.append("text")
-    .attr("transform", `translate(2,-10})`)
+    .attr("class", "title")
+    .attr("x", "2")
+    .attr("y", "-10")
     .attr("dy", ".35em")
     .attr("font-size", "12px")
     .attr("font-family", "arial")
@@ -172,6 +223,10 @@ async function updateFatalTypeAge(selection, fill){
     .style("fill", "black")
     .text(`Most Frequent Fatality Type by Age for ${selection}`);
 
+  svgFatalTypeAge.selectAll(".title")
+    .text(`Most Frequent Fatality Type by Age for ${selection}`)
+
+  // Color for dots 
   let dotFillColor = function(d) { 
     if (d==="Van Driver"){
       color = "mediumseagreen";
@@ -186,6 +241,7 @@ async function updateFatalTypeAge(selection, fill){
     }
     return color;};
 
+  // Dots for chart
   groupFatalTypeAge = svgFatalTypeAge.selectAll(".bar")
     .data(data);
 
@@ -209,17 +265,16 @@ async function updateFatalTypeAge(selection, fill){
   
   groupFatalTypeAge.transition()
     .duration(500)
+    .attr("cx", d => {return xFatalTypeAge(d.age); })
     .attr("cy", d => {return yFatalTypeAge(d.fatalCasualtyType); })
     .style("fill", d => {return dotFillColor(d.fatalCasualtyType);});
 
   groupFatalTypeAge.exit().remove();
 
-
-
 }
 
 
-//// FATALITY TYPE BY COUNT
+//// FATALITY TYPE BY COUNT: svgFatalTypeCount
 
 async function updateFatalTypeCount(selection, fill){
   data = await d3.json(`fatalityTypeCount/${selection}`);
@@ -231,23 +286,45 @@ async function updateFatalTypeCount(selection, fill){
 
   xFatalTypeCount.domain(data.map(d => d.fatalCasualtyType));
   yFatalTypeCount.domain([0, d3.max(data.map(d => d.count))]);
+  
+  svgFatalTypeCount.selectAll(".xAxisFatalTypeCount").remove();
+  svgFatalTypeCount.selectAll(".yAxisFatalTypeCount").remove();
 
-  // Add the X Axis
+  // X-Axis
+  let xAxisFatalTypeCount = d3.axisBottom()
+    .scale(xFatalTypeCount);
+
   svgFatalTypeCount.append("g")
-    .attr("class", "xaxis axis")
+    .attr("class", "xAxisFatalTypeCount")
     .attr("transform", `translate(0, ${height})`)
-    .call(d3.axisBottom(xFatalTypeCount))
+    .call(xAxisFatalTypeCount)
     .selectAll(".tick text")
-      .style("font-size", "8px")
-      .call(wrapXAxis, xFatalTypeCount.bandwidth());
+      .style("font-size", "8px");
 
+  svgFatalTypeCount.selectAll(".xAxisFatalTypeCount")
+    .transition()
+      .attr("transform", `translate(0, ${height})`)
+      .call(xAxisFatalTypeCount)
+      .selectAll(".tick text")
+        .style("font-size", "8px");
 
-  // Add the Y Axis
+  //Y-Axis
+  let yAxisFatalTypeCount = d3.axisLeft()
+    .scale(yFatalTypeCount);
+
   svgFatalTypeCount.append("g")
-    .call(d3.axisLeft(yFatalTypeCount));
+    .attr("class", "yAxisFatalTypeCount")
+    .call(yAxisFatalTypeCount);
 
-  // title
+  svgFatalTypeCount.selectAll(".yAxisFatalTypeCount")
+    .transition()
+      .call(yAxisFatalTypeCount);
+
+  // Title
+  svgFatalTypeCount.selectAll(".title").remove();
+
   svgFatalTypeCount.append("text")
+    .attr("class", "title")
     .attr("transform", `translate(2,-10)`)
     .attr("dy", ".35em")
     .attr("font-size", "12px")
@@ -256,6 +333,19 @@ async function updateFatalTypeCount(selection, fill){
     .style("fill", "black")
     .text(`Fatal Casualty Type by Count for ${selection}`);
 
+  svgFatalTypeCount.selectAll(".title")
+    .text(`Fatal Casualty Type by Count for ${selection}`)
+
+  // use this for fill in mouseover
+  if (selection==="Female"){
+    selectionColor = "indianred";
+  }else if (selection==="Male"){
+    selectionColor = "steelblue";
+  } else{
+    selectionColor = "mediumseagreen";
+  };
+
+  // Bars for chart
   groupFatalTypeCount = svgFatalTypeCount
     .selectAll(".bar")
     .data(data);
@@ -277,65 +367,16 @@ async function updateFatalTypeCount(selection, fill){
           .style("display", "inline-block")
           .html(`Type: ${d.fatalCasualtyType} <br>Count: ${d.count}`);})
       .on("mouseout", (d,i,nodes) => { 
-        d3.select(nodes[i]).style("fill", fill);
+        d3.select(nodes[i]).style("fill", selectionColor);
         tooltip.style("display", "none");});
 
   groupFatalTypeCount.transition()
     .duration(500)
+    .attr("x",  d => {return xFatalTypeCount(d.fatalCasualtyType);})
     .attr("y", d => {return yFatalTypeCount(d.count);})
     .attr("height", d => {return height - yFatalTypeCount(d.count);})
     .style("fill", fill);
 
   groupFatalTypeCount.exit().remove()
 
-}
-
-
-function wrapYAxis(text, width) {
-  text.each(function() {
-    let text = d3.select(this),
-      words = text.text().split(/\s+/).reverse(),
-      word,
-      line = [],
-      lineNumber = 0,
-      lineHeight = 1.1, // ems
-      y = text.attr("y"),
-      dy = parseFloat(text.attr("dy")),
-      tspan = text.text(null).append("tspan").attr("x", -10).attr("y", y).attr("dy", dy + "em");
-    while (word = words.pop()) {
-      line.push(word);
-      tspan.text(line.join(" "));
-      if (tspan.node().getComputedTextLength() > width) {
-        line.pop();
-        tspan.text(line.join(" "));
-        line = [word];
-        tspan = text.append("tspan").attr("x", -10).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-      }
-    }
-  });
-}
-
-
-function wrapXAxis(text, width) {
-  text.each(function() {
-    let text = d3.select(this),
-      words = text.text().split(/\s+/).reverse(),
-      word,
-      line = [],
-      lineNumber = 0,
-      lineHeight = 1.1, // ems
-      y = text.attr("y"),
-      dy = parseFloat(text.attr("dy")),
-      tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
-    while (word = words.pop()) {
-      line.push(word);
-      tspan.text(line.join(" "));
-      if (tspan.node().getComputedTextLength() > width) {
-        line.pop();
-        tspan.text(line.join(" "));
-        line = [word];
-        tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-      }
-    }
-  });
 }
