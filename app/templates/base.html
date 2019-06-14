@@ -1,0 +1,52 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}Great Britian Fatal Accidents{% endblock %}
+
+{% block navbar %}
+    <style>
+        /* Entire navbar background */
+        .navbar-default {
+            background-color: #202020;
+            border-radius: 0 !important;
+        }
+        /* "Great Britain Fatal Accidents" label text color */
+        .navbar-default .navbar-brand {
+            color: #A9A9A9;
+        }
+        /* "Great Britain Fatal Accidents" text color white when hover */
+        .navbar-default .navbar-brand:hover, 
+        .navbar-default .navbar-brand:focus {
+            color: #ecf0f1;
+        }
+        /* Other tabs label text color */
+        .navbar-default .navbar-nav > li > a {
+            color: #A9A9A9;
+        }
+        /* Other tabs label color white when hover */
+        .navbar-default .navbar-nav > li > a:hover, 
+        .navbar-default .navbar-nav > li > a:focus {
+            color: #ecf0f1;
+        }
+    </style>
+    <nav class="navbar navbar-default">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-target="#navbar" aria-expanded="false">
+                <span class="sr-only">Toggle navigation </span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/about">Great Britain Fatal Accidents</a>
+        </div>
+        <div class="collapse navbar-collapse" id="#navbar">
+            <ul class="nav navbar-nav">
+                <li><a href="/about">About</a></li>
+                <li><a href="/trends">Trends</a></li>
+                <li><a href="/type">Age and Type</a></li>
+            </ul>
+        </div>
+    </nav>
+{% endblock %}
+
+
+{% block content %}{% endblock %}
