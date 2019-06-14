@@ -17,35 +17,78 @@
     fill: indianRed;}
   
   .focus circle {
-  	fill: none;
+    fill: none;
     stroke: steelblue;}
 
-	.toolTip {
+  .toolTip {
     position: absolute;
     display: none;
-    min-width: 50px;
+    min-width: 30px;
     height: auto;
     background: none repeat scroll 0 0 #ffffff;
     border: 1px solid #6F257F;
-    padding: 5px;
+    padding: 3px;
     text-align: center;}
 
+  .text{
+    margin-left: 40px;
+    margin-right: 40px;}
+
+  .plot{
+    margin-left:30px;
+    margin-right:30px;}
+
+  .lineFatalitiesLabel{
+    font-size: 11px;
+    text-anchor: start;
+    fill: red;}
+
+  .lineCasualtiesLabel{
+    font-size: 11px;
+    text-anchor: start;
+    fill: steelblue;}
+
+  .title{
+    font-size: 12px;
+    text-anchor: start;
+    fill: black;}
+
+  .xAxisLabel{
+    font-size: 11px;
+    text-anchor: start;
+    fill: black;}
+
 </style>
-<head>
-    <title>Monthly and Hourly Trends</title>
-</head>
+
 <body>
-	<h2><p style = "font-family:arial"> Monthly and Hourly Trends</p> </h2>
-
-	<p style = "font-family:arial"> Test text to see where this shows up: The United Kingdom's Department for Transport reported 7,981 fatal road accidents in Great Britain from 2006 to 2008. These reports consist of two datasets: one involving information about the accident and the other holds the details of the fatal casualty. This dashboard contains visualizations and analysis for the monthly and hourly accident occurance, age and gender of fatality, and fatality types. 
-
-  Click the "Monthly and Hourly Trends" or "Age and Fatal Casualty Type" tabs to continue. </p>
+  <div class="text">
+    <h2><p>Trends</p> </h2>
+    <p>Short description about the two trends that will be included</p>
+    <h4>Monthly Trends</h4>
+    We first look to see if any month have more fatalities or total caualties. In term of casualties, March is the lowest month and October is the highest. February is the month with the lowest number of fatalities and October is still the highest. 
+    <br>
+    <br>
+  </div>
+  <div class="plot">
+    <svg id="monthly"></svg>
+  </div>
+  <br>
+  <div class="text">
+    <h4>Hourly Trends</h4>
+    We can also break down number of casualties and fatalities by hour of the day. These graphs follow the time of day were most people are driving. The values for both casualities and fatalities are lowest in the morning hours. Around 6 a.m., both start to increase. This increase continues throughout the day until 6 p.m. when it starts to decline again. 
+    <br>
+    <br>
+  </div>
+  <div class="plot">
+    <svg id="hourly"></svg>
+  </div>
+  <br>
+  <br>
+  <br>
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
 
-  <script type="text/javascript" src="{{url_for('static', filename='js/monthlyTrend.js')}}"></script>
-
-	<script type="text/javascript" src="{{url_for('static', filename='js/hourlyTrend.js')}}"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='js/trends.js')}}"></script>
 
 </body>
 {% endblock %}

@@ -1,14 +1,15 @@
 const tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
-//// FATALITY COUNT BY AGE: svgFatalCountAge
-const margin = {top: 20, right: 20, bottom: 60, left: 65},
+const margin = {top: 20, right: 20, bottom: 20, left: 70},
   width = 1000 - margin.left - margin.right,
   height = 250 - margin.top - margin.bottom;
+
+//// FATALITY COUNT BY AGE: svgFatalCountAge
 
 const xFatalCountAge = d3.scaleBand().rangeRound([0, width]).padding(.1);
 const yFatalCountAge = d3.scaleLinear().rangeRound([height, 0]);
 
-let svgFatalCountAge = d3.select("body").append("svg")
+let svgFatalCountAge = d3.select("#fatalCountAge")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
@@ -19,7 +20,7 @@ let svgFatalCountAge = d3.select("body").append("svg")
 const xFatalTypeAge = d3.scaleLinear().range([0, width]);
 const yFatalTypeAge = d3.scalePoint().rangeRound([height, 0]);
 
-let svgFatalTypeAge = d3.select("body").append("svg")
+let svgFatalTypeAge = d3.select("#fatalTypeAge")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
@@ -31,12 +32,20 @@ let svgFatalTypeAge = d3.select("body").append("svg")
 const xFatalTypeCount = d3.scaleBand().rangeRound([0, width]).padding(.1);
 const yFatalTypeCount = d3.scaleLinear().rangeRound([height, 0]);
 
-let svgFatalTypeCount = d3.select("body").append("svg")
+let svgFatalTypeCount = d3.select("#fatalTypeCount")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
   .attr("transform",`translate(${margin.left}, ${margin.top})`);
 
+//// If we want All to be checked when "Age and Types" load and have graphs show up 
+//// need to figure out text 
+//// change "All" radio button to checked
+// let selection = "All";
+// let fill = "mediumseagreen";
+// updateFatalCountAge(selection, fill);
+// updateFatalTypeAge(selection, fill);
+// updateFatalTypeCount(selection, fill);
 
 //// BUTTON/GRAPH UPDATES
 const buttons = d3.selectAll('input');
@@ -44,15 +53,32 @@ buttons.on('change', (d,i,nodes) => {
   let selection = nodes[i].value;
   console.log(`button changed to ${selection}`);
   let fill;
-
+  
+  // determine text and fill color for graphs
+  // Sublime: View > Wrap Text
   if (selection==="Female"){
     fill = "indianred";
+    textFatalCountAge ="Since females account for only 25% of all fatalities, the distribution of fatalities across ages remains similar but the amount of fatalities is smaller. The age with the highest fatal casualty count is 19 with only 72 fatalities. Comparing this distribution with the population and males, the females' has a more prominent increase around age 80.";
+    textFatalTypeCount ="The top three fatal casualty types for females are relatively close and only differ by 11 fatalities. There is a drastic change from third highest to fourth highest of 580 fatalities.";
+    textFatalTypeAge ="Text here about fatal type age for female";
   }else if (selection==="Male"){
     fill = "steelblue";
+    textFatalCountAge ="Since majority of fatalities are male, it males since why the male population follows the same age trend as the entire population. The fatal casualty count for people less than 14 is relatively low with an increase around age 15. The age with the highest fatal casualty count for males is 18 with 256 fatalities. Then, the fatal casualty count decrease into the late 20s. After age 40, overall, there is a steady decrease into the 90s.";
+    textFatalTypeCount ="Text here about fatal type age for male";
+    textFatalTypeAge ="Text here for fatal type age for male:";
   } else{
     fill = "mediumseagreen";
+    textFatalCountAge ="While being less than 15, the number of fatalities is relatively low. This starts to increase drastically around age 15-16. In the United Kingdom, the legal driving age is 17 but teenagers can receive learning permits around the age of 16. The age with the highest fatal casualty count for the population is 18 with 325 fatalities. After age 18, the number of fatalities decreases almost as drastically as it increased before. There is a more subtle decrease from ages 40 to 70, with a slight increase from the late 70s and into the 80s where we see it decrease again.";
+    textFatalTypeCount ="Fatal Casualty Type consists of which vehicle and what role the fatal casualty was playing in the vehicle at the time of the accident. This varies from being a pedestrian, a van passenger, or a bus driver. Overall, the four highest fatal casualty types for the entire population were car driver, pedestrian, motorcycle rider, and car passenger. Out of the total number of fatalities, these top four account for 90%. Car driver alone accounts for 33% of the fatal casualty types.";
+    textFatalTypeAge ="How the most frequent fatality type changes with age follows the general life of a person. From the age 0 to age 17, the most frequent alternates between pedestrian and car passenger. A year after driver's license eligibility, the most frequent changes to car driver. This continues into the mid 30s. 35 to 46 are the only ages where motorcycle rider is the most frequent fatality type. Afterward, the most frequent returns to car driver until 70, where it returns to pedestrian. ";
   }
-
+  
+  // select the text for div in html 
+  d3.select("#textFatalCountAge").text(textFatalCountAge);
+  d3.select("#textFatalTypeAge").text(textFatalTypeAge);
+  d3.select("#textFatalTypeCount").text(textFatalTypeCount);
+  
+  // graphs update 
   updateFatalCountAge(selection, fill);
   updateFatalTypeAge(selection, fill);
   updateFatalTypeCount(selection, fill);
@@ -72,26 +98,29 @@ async function updateFatalCountAge(selection, fill){
 
   });
 
+  // Set domains
   xFatalCountAge.domain(data.map(d => d.age));
   yFatalCountAge.domain([0, d3.max(data.map(d => d.count))]);
-
+  
+  // Remove old axes
   svgFatalCountAge.selectAll(".xAxisFatalCountAge").remove();
   svgFatalCountAge.selectAll(".yAxisFatalCountAge").remove();
 
-  // X-Axis 
+  // Create X-Axis 
   let xAxisFatalCountAge = d3.axisBottom()
-    .scale(xFatalCountAge);
+    .scale(xFatalCountAge)
+    .tickValues([0,10,20,30,40,50,60,70,80,90]);
 
   svgFatalCountAge.append("g")
     .attr("class", "xAxisFatalCountAge")
     .attr("transform", `translate(0, ${height})`)
-    .call(xAxisFatalCountAge.tickValues([0,10,20,30,40,50,60,70,80,90]));
+    .call(xAxisFatalCountAge);
 
   svgFatalCountAge.selectAll(".xAxisFatalCountAge")
     .transition()
-      .call(xAxisFatalCountAge.tickValues([0,10,20,30,40,50,60,70,80,90]));
+      .call(xAxisFatalCountAge);
 
-  // Y-Axis
+  // Create Y-Axis
   let yAxisFatalCountAge = d3.axisLeft()
     .scale(yFatalCountAge);
 
@@ -110,10 +139,6 @@ async function updateFatalCountAge(selection, fill){
     .attr("class", "title")
     .attr("transform", `translate(2,-10)`)
     .attr("dy", ".35em")
-    .attr("font-size", "12px")
-    .attr("font-family", "arial")
-    .attr("text-anchor", "start")
-    .style("fill", "black")
     .text(`Fatal Casualty Count by Age for ${selection}`);
   
   svgFatalCountAge.selectAll(".title")
@@ -175,13 +200,15 @@ async function updateFatalTypeAge(selection, fill){
 
   });
   
+  // Set domain
   xFatalTypeAge.domain(d3.extent(data.map(d => d.age)));
   yFatalTypeAge.domain(data.map(d => d.fatalCasualtyType));
-
+  
+  // Remove old axes
   svgFatalTypeAge.selectAll(".xAxisFatalTypeAge").remove();
   svgFatalTypeAge.selectAll(".yAxisFatalTypeAge").remove();
 
-  // X-Axis
+  // Create X-Axis
   let xAxisFatalTypeAge = d3.axisBottom()
     .scale(xFatalTypeAge);
 
@@ -193,7 +220,7 @@ async function updateFatalTypeAge(selection, fill){
   svgFatalTypeAge.transition()
       .call(xAxisFatalTypeAge);
 
-  //Y-Axis
+  // Create Y-Axis
   let yAxisFatalTypeAge = d3.axisLeft()
     .scale(yFatalTypeAge);
 
@@ -217,27 +244,23 @@ async function updateFatalTypeAge(selection, fill){
     .attr("x", "2")
     .attr("y", "-10")
     .attr("dy", ".35em")
-    .attr("font-size", "12px")
-    .attr("font-family", "arial")
-    .attr("text-anchor", "start")
-    .style("fill", "black")
     .text(`Most Frequent Fatality Type by Age for ${selection}`);
 
   svgFatalTypeAge.selectAll(".title")
     .text(`Most Frequent Fatality Type by Age for ${selection}`)
 
   // Color for dots 
-  let dotFillColor = function(d) { 
-    if (d==="Van Driver"){
+  let dotFillColor = d => { 
+    if (d==="Car Driver"){
       color = "mediumseagreen";
-    } else if (d==="Van Passenger"){
-      color = "indianred";
+    } else if (d==="Motorcycle Rider"){
+      color = "sandybrown";
     } else if (d==="Pedestrian"){
       color = "steelblue";
     } else if (d==="Car Passenger"){
-      color = "blue";
+      color = "indianred";
     } else{
-      color = "black";
+      color = "rebeccapurple";
     }
     return color;};
 
@@ -283,14 +306,16 @@ async function updateFatalTypeCount(selection, fill){
     d.fatalCasualtyType = d.fatalCasualtyType;
     d.count = +d.count;
   });
-
+  
+  // Set domain 
   xFatalTypeCount.domain(data.map(d => d.fatalCasualtyType));
   yFatalTypeCount.domain([0, d3.max(data.map(d => d.count))]);
   
+  // Remove old axes
   svgFatalTypeCount.selectAll(".xAxisFatalTypeCount").remove();
   svgFatalTypeCount.selectAll(".yAxisFatalTypeCount").remove();
 
-  // X-Axis
+  // Create X-Axis
   let xAxisFatalTypeCount = d3.axisBottom()
     .scale(xFatalTypeCount);
 
@@ -308,7 +333,7 @@ async function updateFatalTypeCount(selection, fill){
       .selectAll(".tick text")
         .style("font-size", "8px");
 
-  //Y-Axis
+  // Create Y-Axis
   let yAxisFatalTypeCount = d3.axisLeft()
     .scale(yFatalTypeCount);
 
@@ -327,10 +352,6 @@ async function updateFatalTypeCount(selection, fill){
     .attr("class", "title")
     .attr("transform", `translate(2,-10)`)
     .attr("dy", ".35em")
-    .attr("font-size", "12px")
-    .attr("font-family", "arial")
-    .attr("text-anchor", "start")
-    .style("fill", "black")
     .text(`Fatal Casualty Type by Count for ${selection}`);
 
   svgFatalTypeCount.selectAll(".title")

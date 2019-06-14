@@ -3,7 +3,7 @@ from flask_bootstrap import Bootstrap
 import pandas as pd
 
 app = Flask(__name__)
-# Bootstrap(app)
+bootstrap = Bootstrap(app)
 
 ### APIs
 @app.route('/hourlyTrendData')
@@ -87,35 +87,41 @@ def fatalTypeAge(selection):
     fatal_age = fatal_age[['Fatal_Casualty_Type', 'Fatal_Casualty_Age', 'Fatal_Casualty_Sex']]
     if (selection != "All"):
         fatal_age = fatal_age.loc[fatal_age['Fatal_Casualty_Sex'] == F'{selection}']
-    fatal_age = fatal_age.groupby('Fatal_Casualty_Age').agg('max')
-    fatal_age = fatal_age.reset_index()
+    fatal_age1 = fatal_age.groupby(['Fatal_Casualty_Age', 'Fatal_Casualty_Type']).size().reset_index()
+    fatal_age2 = fatal_age1.groupby('Fatal_Casualty_Age')[[0]].agg('max')
+    fatal_age2 = fatal_age2.rename(columns={ fatal_age2.columns[-1]: "count" })
+    fatal_age1 = fatal_age1.rename(columns={ fatal_age1.columns[-1]: "count" })
+    fatal_merged = pd.merge(fatal_age2, fatal_age1,  how='left', left_on=['Fatal_Casualty_Age','count'], right_on = ['Fatal_Casualty_Age','count'])
+    fatal_age = fatal_merged[['Fatal_Casualty_Age', 'Fatal_Casualty_Type']]
     fatal_age = fatal_age.sort_values(by=['Fatal_Casualty_Age'], ascending=True)
     fatal_age.drop(fatal_age.tail(1).index,inplace=True)
-    fatal_age = fatal_age[['Fatal_Casualty_Age', 'Fatal_Casualty_Type']]
+    fatal_age.drop(fatal_age.tail(1).index,inplace=True)
     fatal_age['Fatal_Casualty_Age'] = fatal_age.Fatal_Casualty_Age.astype(int)
     fatal_age = fatal_age.sort_values(by=['Fatal_Casualty_Age'], ascending=True)
+    fatal_age = fatal_age.drop_duplicates(subset='Fatal_Casualty_Age', keep="last")
     fatal_age = fatal_age.replace('_', ' ', regex=True)
     fatal_age = fatal_age.rename(index=str, columns={"Fatal_Casualty_Age": "age"})
     fatal_age = fatal_age.rename(index=str, columns={"Fatal_Casualty_Type": "fatalCasualtyType"})
     fatal_age = fatal_age.replace('Other Vehicle Occupant', 'Other Occupant')
     fatal_age = fatal_age.replace('Motor Cycle', 'Motorcycle')
+    fatal_age = fatal_age.replace('Motor Cycle Rider', 'Motorcycle Rider')
     fatal_age_json = fatal_age.to_json(orient='records')
 
     return fatal_age_json
 
 ### Templates
 @app.route('/')
-@app.route('/introduction')
+@app.route('/about')
 def introduction():
-    return render_template("introduction.html", title = "Great Britian Fatal Accidents")
+    return render_template("about.html")
 
 @app.route('/trends')
 def trends():
-    return render_template("trends.html", title = "Monthly and Hourly Trends")
+    return render_template("trends.html")
 
 @app.route('/type')
 def type():
-    return render_template("type.html", title = "Age and Fatality Casualty Types")
+    return render_template("type.html")
 
 if __name__ == '__main__':
     app.run(debug=True)
