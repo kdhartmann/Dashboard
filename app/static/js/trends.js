@@ -53,60 +53,50 @@ let svgMonthly = d3.select("#monthly")
     .append("g")
     .attr("transform",`translate(${margin.left}, ${margin.top})`);
 
-//// Render Plots 
+// Render Plots 
 renderTrendPlots()
 
-// Render Hourly Plot 
-async function renderTrendPlots(){
+function renderTrendPlots(){
+  renderHourly();
+  renderMonthly();
 
-  const dataHourly = await d3.json("hourlyTrendData");
-  const dataMonthly = await d3.json("monthlyTrendData");
+};
 
-  dataHourly.forEach( d => {
+async function renderHourly(){
+
+  const data = await d3.json("hourlyTrendData");
+
+  data.forEach( d => {
     d.hour = +d.hour;
     d.totalCasualties = +d.totalCasualties;
     d.fatalCasualties = +d.fatalCasualties;
 
   });
-
-  dataMonthly.forEach( d => {
-    d.month = +d.month;
-    d.totalCasualties = +d.totalCasualties;
-    d.fatalCasualties = +d.fatalCasualties;
-
-  });
-
-  // set domain 
-  xHourly.domain(d3.extent(dataHourly.map(d => d.hour)));
-  yHourly.domain([0, d3.max(dataHourly.map(d => d.totalCasualties))]);
-
-  xMonthly.domain(d3.extent(dataMonthly.map(d => d.month)));
-  yMonthly.domain([0, d3.max(dataMonthly.map(d => d.totalCasualties))]);
-
+  
   // create the lines 
-  let lineCasualtiesHourly = d3.line()
+  let lineCasualties = d3.line()
     .x(d => {return xHourly(d.hour); })
     .y(d => {return yHourly(d.totalCasualties); });
 
-  let lineFatalitiesHourly = d3.line()
+  let lineFatalities = d3.line()
     .x(d => {return xHourly(d.hour); })
     .y(d => {return yHourly(d.fatalCasualties); });
 
-  let lineCasualtiesMonthly = d3.line()
-    .x(d => {return xMonthly(d.month); })
-    .y(d => {return yMonthly(d.totalCasualties); });
+  // set domain 
+  xHourly.domain(d3.extent(data.map(d => d.hour)));
+  yHourly.domain([0, d3.max(data.map(d => d.totalCasualties))]);
 
-  let lineFatalitiesMonthly = d3.line()
-    .x(d => {return xMonthly(d.month); })
-    .y(d => {return yMonthly(d.fatalCasualties); });
-
-  // Calls a function that adds the line paths, axes, labels, and title
-  addPathsAxesLabels(dataHourly, svgHourly, lineCasualtiesHourly, lineFatalitiesHourly, xHourly, yHourly, lineCasualtiesLabelHourlyY, lineFatalitiesLabelHourlyY, svgHourlyTitleY, svgHourlyTitle, svgHourlyXLabelY, svgHourlyXLabel);
-  addPathsAxesLabels(dataMonthly, svgMonthly, lineCasualtiesMonthly, lineFatalitiesMonthly, xMonthly, yMonthly, lineCasualtiesLabelMonthlyY, lineFatalitiesLabelMonthlyY, svgMonthlyTitleY, svgMonthlyTitle, svgMonthlyXLabelY, svgMonthlyXLabel);
+  // Add the lineCasualties path
+  svgHourly.append("path")
+    .data([data])
+    .style("fill", "none")
+    .style("stroke", "steelblue")
+    .attr("class", "line")
+    .attr("d", lineCasualties);
   
   // Dots for lineCasualties
   svgHourly.selectAll(".dotCasualties")
-    .data(dataHourly)
+    .data(data)
     .enter().append("circle")
       .attr("class", "dotCasualties")
       .attr("cx", d => {return xHourly(d.hour); })
@@ -120,24 +110,17 @@ async function renderTrendPlots(){
           .html(`Hour: ${d.hour} <br>Casualties: ${d.totalCasualties}`);})
       .on("mouseout", d => { tooltip.style("display", "none");});
 
-  svgMonthly.selectAll(".dotCasualties")
-    .data(dataMonthly)
-    .enter().append("circle")
-      .attr("class", "dotCasualties")
-      .attr("cx", d => {return xMonthly(d.month) })
-      .attr("cy", d => {return yMonthly(d.totalCasualties) })
-      .attr("r", circleRadius)
-      .on("mousemove", d => {
-        tooltip
-          .style("left", d3.event.pageX - tooltipLeftPadding + "px")
-          .style("top", d3.event.pageY - tooltipTopPadding + "px")
-          .style("display", "inline-block")
-          .html(`Month: ${d.month} <br>Casualties: ${d.totalCasualties}`);})
-      .on("mouseout", d => {tooltip.style("display", "none");});
+  // Add the lineFatalities path
+  svgHourly.append("path")
+    .data([data])
+    .style("fill", "none")
+    .style("stroke", "red")
+    .attr("class", "line")
+    .attr("d", lineFatalities);
   
   // Dots for lineFatalities
   svgHourly.selectAll(".dotFatalities")
-    .data(dataHourly)
+    .data(data)
     .enter().append("circle")
       .attr("class", "dotFatalities")
       .attr("cx", d => { return xHourly(d.hour) })
@@ -150,9 +133,107 @@ async function renderTrendPlots(){
           .style("display", "inline-block")
           .html(`Hour: ${d.hour} <br>Fatalities: ${d.fatalCasualties}`);})
       .on("mouseout", d => { tooltip.style("display", "none");}); 
+  
+  // Add the X Axis
+  svgHourly.append("g")
+    .attr("transform", `translate(0, ${height})`)
+    .call(d3.axisBottom(xHourly));
 
+  // Add the Y Axis
+  svgHourly.append("g")
+    .call(d3.axisLeft(yHourly));
+  
+  // lineCasualties Label
+  svgHourly.append("text")
+    .attr("class", "lineCasualtiesLabel")
+    .attr("transform", `translate(${lineCasualtiesLabelX}, ${lineCasualtiesLabelHourlyY})`)
+    .attr("dy", ".35em")
+    .text(lineCasualtiesLabel);
+  
+  // lineFatalities Label
+  svgHourly.append("text")
+    .attr("class", "lineFatalitiesLabel")
+    .attr("transform", `translate(${lineFatalitiesLabelX}, ${lineFatalitiesLabelHourlyY})`)
+    .attr("dy", ".35em")
+    .text(lineFatalitiesLabel);
+
+  // Title
+  svgHourly.append("text")
+    .attr("class", "title")
+    .attr("transform", `translate(0, ${svgHourlyTitleY})`)
+    .attr("dy", ".35em")
+    .text(svgHourlyTitle);
+
+  // X-Axis Label
+  svgHourly.append("text")
+    .attr("class", "xAxisLabel")
+    .attr("transform", `translate(${xLabelX}, ${svgHourlyXLabelY})`)
+    .attr("dy", ".35em")
+    .text(svgHourlyXLabel);
+
+}
+
+
+// Render Monthly Plot
+async function renderMonthly(){
+
+  const data = await d3.json("monthlyTrendData");
+
+  data.forEach( d => {
+    d.month = +d.month;
+    d.totalCasualties = +d.totalCasualties;
+    d.fatalCasualties = +d.fatalCasualties;
+
+  });
+
+  // Set the domains
+  xMonthly.domain(d3.extent(data.map(d => d.month)));
+  yMonthly.domain([0, d3.max(data.map(d => d.totalCasualties))]);
+  
+  // create the lines 
+  let lineCasualties = d3.line()
+    .x(d => {return xMonthly(d.month); })
+    .y(d => {return yMonthly(d.totalCasualties); });
+
+  let lineFatalities = d3.line()
+    .x(d => {return xMonthly(d.month); })
+    .y(d => {return yMonthly(d.fatalCasualties); });
+
+  // Add the lineCasualties path
+  svgMonthly.append("path")
+    .data([data])
+    .style("fill", "none")
+    .style("stroke", "steelblue")
+    .attr("class", "line")
+    .attr("d", lineCasualties);
+  
+  // Dots for lineCasualties
+  svgMonthly.selectAll(".dotCasualties")
+    .data(data)
+    .enter().append("circle")
+      .attr("class", "dotCasualties")
+      .attr("cx", d => {return xMonthly(d.month) })
+      .attr("cy", d => {return yMonthly(d.totalCasualties) })
+      .attr("r", circleRadius)
+      .on("mousemove", d => {
+        tooltip
+          .style("left", d3.event.pageX - tooltipLeftPadding + "px")
+          .style("top", d3.event.pageY - tooltipTopPadding + "px")
+          .style("display", "inline-block")
+          .html(`Month: ${d.month} <br>Casualties: ${d.totalCasualties}`);})
+      .on("mouseout", d => {tooltip.style("display", "none");});
+
+  // Add the lineFatalities path
+  svgMonthly.append("path")
+    .data([data])
+    .style("fill", "none")
+    .style("stroke", "red")
+    .attr("class", "line")
+    .attr("d", lineFatalities); 
+  
+  // Dots for lineFatalities
   svgMonthly.selectAll(".dotFatalities")
-    .data(dataMonthly)
+    .data(data)
     .enter().append("circle") 
       .attr("class", "dotFatalities") 
       .attr("cx", d => {return xMonthly(d.month) })
@@ -165,61 +246,41 @@ async function renderTrendPlots(){
           .style("display", "inline-block")
           .html(`Month: ${d.month} <br>Fatalities: ${d.fatalCasualties}`);})
       .on("mouseout", d => {tooltip.style("display", "none");}); 
+  
+  // Add the X Axis
+  svgMonthly.append("g")
+    .attr("transform", `translate(0,${height})`)
+    .call(d3.axisBottom(xMonthly));
 
-}
-
-function addPathsAxesLabels(data, svg, lineCasualties, lineFatalities, xScale, yScale, lineCasualtiesLabelY, lineFatalitiesLabelY, svgTitleY, svgTitle, svgXLabelY, svgXLabel){
-  // Add the lineCasualties path
-  svg.append("path")
-    .data([data])
-    .style("fill", "none")
-    .style("stroke", "steelblue")
-    .attr("class", "line")
-    .attr("d", lineCasualties);
-
-  // Add the lineFatalities path
-  svg.append("path")
-    .data([data])
-    .style("fill", "none")
-    .style("stroke", "red")
-    .attr("class", "line")
-    .attr("d", lineFatalities);
-
-  // Add the X-Axis
-  svg.append("g")
-    .attr("transform", `translate(0, ${height})`)
-    .call(d3.axisBottom(xScale));
-
-  // Add the Y-Axis
-  svg.append("g")
-    .call(d3.axisLeft(yScale));
-
-  // Add the lineCasualties label
-  svg.append("text")
+  // Add the Y Axis
+  svgMonthly.append("g")
+    .call(d3.axisLeft(yMonthly));
+  
+  // lineCasualties Label
+  svgMonthly.append("text")
     .attr("class", "lineCasualtiesLabel")
-    .attr("transform", `translate(${lineCasualtiesLabelX}, ${lineCasualtiesLabelY})`)
+    .attr("transform", `translate(${lineCasualtiesLabelX},${lineCasualtiesLabelMonthlyY})`)
     .attr("dy", ".35em")
     .text(lineCasualtiesLabel);
 
-  // Add the lineFatalities label
-  svg.append("text")
+  // lineFatalities Label
+  svgMonthly.append("text")
     .attr("class", "lineFatalitiesLabel")
-    .attr("transform", `translate(${lineFatalitiesLabelX}, ${lineFatalitiesLabelY})`)
+    .attr("transform", `translate(${lineFatalitiesLabelX},${lineFatalitiesLabelMonthlyY})`)
     .attr("dy", ".35em")
     .text(lineFatalitiesLabel);
-
-  // Add the title
-  svg.append("text")
+  
+  // Title
+  svgMonthly.append("text")
     .attr("class", "title")
-    .attr("transform", `translate(0, ${svgTitleY})`)
+    .attr("transform", `translate(0,${svgMonthlyTitleY})`)
     .attr("dy", ".35em")
-    .text(svgTitle);
+    .text(svgMonthlyTitle);
 
-  // Add the X-Axis label
-  svg.append("text")
+  // X-Axis Label
+  svgMonthly.append("text")
     .attr("class", "xAxisLabel")
-    .attr("transform", `translate(${xLabelX}, ${svgXLabelY})`)
+    .attr("transform", `translate(${xLabelX},${svgMonthlyXLabelY})`)
     .attr("dy", ".35em")
-    .text(svgXLabel);
-
-};
+    .text(svgMonthlyXLabel);
+}
