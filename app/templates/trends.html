@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% set active_page = "trends" %}
+
 {% block content %}
 <style>
   .dotCasualties {
@@ -64,27 +66,43 @@
   <div class="text">
     <h2><p>Trends</p> </h2>
     <p>Short description about the two trends that will be included</p>
-    <h4>Monthly Trends</h4>
-    We first look to see if any month have more fatalities or total caualties. In term of casualties, March is the lowest month and October is the highest. February is the month with the lowest number of fatalities and October is still the highest. 
     <br>
+    <h4>Monthly Trends</h4>
     <br>
   </div>
-  <div class="plot">
-    <svg id="monthly"></svg>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="plot">
+          <svg id="monthly"></svg>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="text">
+          We first look to see if any month have more fatalities or total caualties. In term of casualties, March is the lowest month and October is the highest. February is the month with the lowest number of fatalities and October is still the highest. 
+        </div>
+      </div>
+    </div>
   </div>
   <br>
   <div class="text">
     <h4>Hourly Trends</h4>
-    We can also break down number of casualties and fatalities by hour of the day. These graphs follow the time of day were most people are driving. The values for both casualities and fatalities are lowest in the morning hours. Around 6 a.m., both start to increase. This increase continues throughout the day until 6 p.m. when it starts to decline again. 
-    <br>
     <br>
   </div>
-  <div class="plot">
-    <svg id="hourly"></svg>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="plot">
+          <svg id="hourly"></svg>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="text">
+          We can also break down number of casualties and fatalities by hour of the day. These graphs follow the time of day were most people are driving. The values for both casualities and fatalities are lowest in the morning hours. Around 6 a.m., both start to increase. This increase continues throughout the day until 6 p.m. when it starts to decline again. 
+        </div>
+      </div>
+    </div>
   </div>
-  <br>
-  <br>
-  <br>
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
 

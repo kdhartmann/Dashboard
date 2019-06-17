@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% set active_page = "type" %}
+
 {% block content %}
 
 <style>
@@ -41,7 +43,7 @@
     </p>
     <h5>Select an option:</h5>
     <form name="myForm">
-      <input type="radio" name="myRadios"  value="All" >     All     </value>
+      <input type="radio" name="myRadios"  value="All" checked >     All     </value>
       <input type="radio" name="myRadios"  value="Male" >     Male     </value>
       <input type="radio" name="myRadios"  value="Female" >     Female     </value>
     </form>

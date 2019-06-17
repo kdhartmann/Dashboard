@@ -4,7 +4,7 @@ const margin = {top: 20, right: 20, bottom: 20, left: 70},
   width = 1000 - margin.left - margin.right,
   height = 250 - margin.top - margin.bottom;
 
-//// FATALITY COUNT BY AGE: svgFatalCountAge
+// FATALITY COUNT BY AGE: svgFatalCountAge
 
 const xFatalCountAge = d3.scaleBand().rangeRound([0, width]).padding(.1);
 const yFatalCountAge = d3.scaleLinear().rangeRound([height, 0]);
@@ -15,7 +15,7 @@ let svgFatalCountAge = d3.select("#fatalCountAge")
   .append("g")
   .attr("transform",`translate(${margin.left}, ${margin.top})`);
 
-//// FATALITY TYPE BY AGE: svgFatalTypeAge
+// FATALITY TYPE BY AGE: svgFatalTypeAge
 
 const xFatalTypeAge = d3.scaleLinear().range([0, width]);
 const yFatalTypeAge = d3.scalePoint().rangeRound([height, 0]);
@@ -27,7 +27,7 @@ let svgFatalTypeAge = d3.select("#fatalTypeAge")
   .attr("transform",`translate(${margin.left}, ${margin.top})`);
 
 
-//// FATALITY TYPE BY COUNT: svgFatalTypeCount
+// FATALITY TYPE BY COUNT: svgFatalTypeCount
 
 const xFatalTypeCount = d3.scaleBand().rangeRound([0, width]).padding(.1);
 const yFatalTypeCount = d3.scaleLinear().rangeRound([height, 0]);
@@ -38,21 +38,31 @@ let svgFatalTypeCount = d3.select("#fatalTypeCount")
   .append("g")
   .attr("transform",`translate(${margin.left}, ${margin.top})`);
 
-//// If we want All to be checked when "Age and Types" load and have graphs show up 
-//// need to figure out text 
-//// change "All" radio button to checked
-// let selection = "All";
-// let fill = "mediumseagreen";
-// updateFatalCountAge(selection, fill);
-// updateFatalTypeAge(selection, fill);
-// updateFatalTypeCount(selection, fill);
+// "All" already selected/output when /type is loaded
+let selection = "All";
+let fill = "mediumseagreen";
+updateFatalCountAge(selection, fill);
+updateFatalTypeAge(selection, fill);
+updateFatalTypeCount(selection, fill);
 
-//// BUTTON/GRAPH UPDATES
+let textFatalCountAgeMale ="While being less than 15, the number of fatalities is relatively low. This starts to increase drastically around age 15-16. In the United Kingdom, the legal driving age is 17 but teenagers can receive learning permits around the age of 16. The age with the highest fatal casualty count for the population is 18 with 325 fatalities. After age 18, the number of fatalities decreases almost as drastically as it increased before. There is a more subtle decrease from ages 40 to 70, with a slight increase from the late 70s and into the 80s where we see it decrease again.";
+let textFatalTypeCountMale ="Fatal Casualty Type consists of which vehicle and what role the fatal casualty was playing in the vehicle at the time of the accident. This varies from being a pedestrian, a van passenger, or a bus driver. Overall, the four highest fatal casualty types for the entire population were car driver, pedestrian, motorcycle rider, and car passenger. Out of the total number of fatalities, these top four account for 90%. Car driver alone accounts for 33% of the fatal casualty types.";
+let textFatalTypeAgeMale ="How the most frequent fatality type changes with age follows the general life of a person. From the age 0 to age 17, the most frequent alternates between pedestrian and car passenger. A year after driver's license eligibility, the most frequent changes to car driver. This continues into the mid 30s. 35 to 46 are the only ages where motorcycle rider is the most frequent fatality type. Afterward, the most frequent returns to car driver until 70, where it returns to pedestrian. ";
+
+d3.select("#textFatalCountAge").text(textFatalCountAgeMale);
+d3.select("#textFatalTypeAge").text(textFatalTypeAgeMale);
+d3.select("#textFatalTypeCount").text(textFatalTypeCountMale);
+
+// BUTTON/GRAPH UPDATES
 const buttons = d3.selectAll('input');
 buttons.on('change', (d,i,nodes) => {
   let selection = nodes[i].value;
   console.log(`button changed to ${selection}`);
   let fill;
+
+  let textFatalCountAge;
+  let textFatalTypeCount;
+  let textFatalTypeAge;
   
   // determine text and fill color for graphs
   // Sublime: View > Wrap Text
@@ -68,9 +78,10 @@ buttons.on('change', (d,i,nodes) => {
     textFatalTypeAge ="Text here for fatal type age for male:";
   } else{
     fill = "mediumseagreen";
-    textFatalCountAge ="While being less than 15, the number of fatalities is relatively low. This starts to increase drastically around age 15-16. In the United Kingdom, the legal driving age is 17 but teenagers can receive learning permits around the age of 16. The age with the highest fatal casualty count for the population is 18 with 325 fatalities. After age 18, the number of fatalities decreases almost as drastically as it increased before. There is a more subtle decrease from ages 40 to 70, with a slight increase from the late 70s and into the 80s where we see it decrease again.";
-    textFatalTypeCount ="Fatal Casualty Type consists of which vehicle and what role the fatal casualty was playing in the vehicle at the time of the accident. This varies from being a pedestrian, a van passenger, or a bus driver. Overall, the four highest fatal casualty types for the entire population were car driver, pedestrian, motorcycle rider, and car passenger. Out of the total number of fatalities, these top four account for 90%. Car driver alone accounts for 33% of the fatal casualty types.";
-    textFatalTypeAge ="How the most frequent fatality type changes with age follows the general life of a person. From the age 0 to age 17, the most frequent alternates between pedestrian and car passenger. A year after driver's license eligibility, the most frequent changes to car driver. This continues into the mid 30s. 35 to 46 are the only ages where motorcycle rider is the most frequent fatality type. Afterward, the most frequent returns to car driver until 70, where it returns to pedestrian. ";
+    textFatalCountAge = textFatalCountAgeMale;
+    textFatalTypeAge = textFatalTypeAgeMale;
+    textFatalTypeCount = textFatalTypeCountMale;
+
   }
   
   // select the text for div in html 
@@ -86,7 +97,7 @@ buttons.on('change', (d,i,nodes) => {
 });
 
 
-//// FATALITY COUNT BY AGE: svgFatalCountAge 
+// FATALITY COUNT BY AGE: svgFatalCountAge 
 
 async function updateFatalCountAge(selection, fill){
 
@@ -189,7 +200,7 @@ async function updateFatalCountAge(selection, fill){
 
 } 
 
-//// FATALITY TYPE BY AGE: svgFatalTypeAge
+// FATALITY TYPE BY AGE: svgFatalTypeAge
 
 async function updateFatalTypeAge(selection, fill){
   data = await d3.json(`fatalTypeAge/${selection}`);
@@ -297,7 +308,7 @@ async function updateFatalTypeAge(selection, fill){
 }
 
 
-//// FATALITY TYPE BY COUNT: svgFatalTypeCount
+// FATALITY TYPE BY COUNT: svgFatalTypeCount
 
 async function updateFatalTypeCount(selection, fill){
   data = await d3.json(`fatalityTypeCount/${selection}`);

@@ -3,7 +3,7 @@ const tooltip = d3.select("body").append("div").attr("class", "toolTip");
 //// svgHourly
 
 const margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = 1000 - margin.left - margin.right,
+    width = 500 - margin.left - margin.right,
     height = 250 - margin.top - margin.bottom;
 
 const xHourly = d3.scaleLinear().range([0, width]);
