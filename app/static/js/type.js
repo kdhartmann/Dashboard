@@ -45,13 +45,13 @@ updateFatalCountAge(selection, fill);
 updateFatalTypeAge(selection, fill);
 updateFatalTypeCount(selection, fill);
 
-let textFatalCountAgeMale ="While being less than 15, the number of fatalities is relatively low. This starts to increase drastically around age 15-16. In the United Kingdom, the legal driving age is 17 but teenagers can receive learning permits around the age of 16. The age with the highest fatal casualty count for the population is 18 with 325 fatalities. After age 18, the number of fatalities decreases almost as drastically as it increased before. There is a more subtle decrease from ages 40 to 70, with a slight increase from the late 70s and into the 80s where we see it decrease again.";
-let textFatalTypeCountMale ="Fatal Casualty Type consists of which vehicle and what role the fatal casualty was playing in the vehicle at the time of the accident. This varies from being a pedestrian, a van passenger, or a bus driver. Overall, the four highest fatal casualty types for the entire population were car driver, pedestrian, motorcycle rider, and car passenger. Out of the total number of fatalities, these top four account for 90%. Car driver alone accounts for 33% of the fatal casualty types.";
-let textFatalTypeAgeMale ="How the most frequent fatality type changes with age follows the general life of a person. From the age 0 to age 17, the most frequent alternates between pedestrian and car passenger. A year after driver's license eligibility, the most frequent changes to car driver. This continues into the mid 30s. 35 to 46 are the only ages where motorcycle rider is the most frequent fatality type. Afterward, the most frequent returns to car driver until 70, where it returns to pedestrian. ";
+let textFatalCountAgeAll ="While being less than 15, the number of fatalities is relatively low. The number of fatalities starts to increase drastically around age 15-16. In the United Kingdom, the legal driving age is 17, but teenagers can receive learning permits around the age of 16. The age with the highest fatal casualty count for the population is 18 with 325 fatalities. After age 18, the number of fatalities decreases almost as drastically as it increased before. There is a more subtle decrease from ages 40 to 70, with a slight increase from the late 70s and into the 80s where we see it decrease again.";
+let textFatalTypeCountAll ="Fatal Casualty Type consists of which vehicle and what role the fatal casualty was playing in the vehicle at the time of the accident. Fatal Casualty Type varies from being a pedestrian or a van passenger to a bus driver. Overall, the four highest fatal casualty types for the entire population were car driver, pedestrian, motorcycle rider, and car passenger. Out of the total number of fatalities, these top four account for 90%. Car driver alone accounts for 33% of the 8,656 fatal casualties.";
+let textFatalTypeAgeAll ="How the most frequent fatality type changes with age follows the general life of a person. From the age 0 to 17, the most frequent alternates between pedestrian and car passenger. A year after driver's license eligibility, the most frequent changes to a car driver. Car driver continues into the mid-30s. 35 to 46 are the only ages where motorcycle rider is the most frequent fatality type. Afterward, the most frequent returns to car driver until 70, where it returns to a pedestrian. ";
 
-d3.select("#textFatalCountAge").text(textFatalCountAgeMale);
-d3.select("#textFatalTypeAge").text(textFatalTypeAgeMale);
-d3.select("#textFatalTypeCount").text(textFatalTypeCountMale);
+d3.select("#textFatalCountAge").text(textFatalCountAgeAll);
+d3.select("#textFatalTypeAge").text(textFatalTypeAgeAll);
+d3.select("#textFatalTypeCount").text(textFatalTypeCountAll);
 
 // BUTTON/GRAPH UPDATES
 const buttons = d3.selectAll('input');
@@ -68,19 +68,19 @@ buttons.on('change', (d,i,nodes) => {
   // Sublime: View > Wrap Text
   if (selection==="Female"){
     fill = "indianred";
-    textFatalCountAge ="Since females account for only 25% of all fatalities, the distribution of fatalities across ages remains similar but the amount of fatalities is smaller. The age with the highest fatal casualty count is 19 with only 72 fatalities. Comparing this distribution with the population and males, the females' has a more prominent increase around age 80.";
-    textFatalTypeCount ="The top three fatal casualty types for females are relatively close and only differ by 11 fatalities. There is a drastic change from third highest to fourth highest of 580 fatalities.";
-    textFatalTypeAge ="Text here about fatal type age for female";
+    textFatalCountAge ="Since females account for only 25% of all fatalities, the distribution of fatalities across ages remains similar, but the amount of fatalities is smaller. The age with the highest fatal casualty count is 19, with only 72 fatalities. Comparing this distribution with the population's and male's, the female's has a more noticeable increase around age 80.";
+    textFatalTypeCount ="Females have three distinct highest fatality types: pedestrian, car driver, and car passenger. These three fatality types are relatively close and only differ by 11 fatalities. There is a drastic change from the third highest to fourth highest of 580 fatalities. Pedestrian is the highest with 657 fatalities, while males had 1,236 pedestrian fatalities and it was only the third highest fatality type.";
+    textFatalTypeAge ="The top three fatality types are the only ones seen in the most frequent fatality type by age. A motorcycle rider was a most frequent fatality type for the entire population, but is not seen as a one for females. This is not surprising considering only 51 females fatalities are associated with being a motorcycle rider. Car passenger is overall the most frequent fatality type for females less than 18 years old. A car driver is the most frequent from ages 19 to 64 with a few pedestrians and car passenger fatality types appearing, also. After the age of 64, a pedestrian is the most frequent.";
   }else if (selection==="Male"){
     fill = "steelblue";
-    textFatalCountAge ="Since majority of fatalities are male, it males since why the male population follows the same age trend as the entire population. The fatal casualty count for people less than 14 is relatively low with an increase around age 15. The age with the highest fatal casualty count for males is 18 with 256 fatalities. Then, the fatal casualty count decrease into the late 20s. After age 40, overall, there is a steady decrease into the 90s.";
-    textFatalTypeCount ="Text here about fatal type age for male";
-    textFatalTypeAge ="Text here for fatal type age for male:";
+    textFatalCountAge ="Since the majority of fatalities are male, the male distributions look very similar to the distributions for the entire population. The fatal casualty count for people less than 14 is relatively low with an increase around age 15. The age with the highest fatal casualty count for males is 18 with 256 fatalities. Then, the fatal casualty count decreases into the late 20s. After age 40, overall, there is a steady decrease into the 90s.";
+    textFatalTypeCount ="The top four fatal casualty types are also the same for males as they were for the entire population: car driver, motorcycle rider, pedestrian, and car passenger. Motorcycle rider surpassed pedestrian as the second most fatal casualty type. Motorcycle rider now has 322 more fatalities than pedestrian, but for the entire population, motorcycle rider had 283 fewer fatalities compared to pedestrian.";
+    textFatalTypeAge ="There are three critical differences between the male's most frequent fatality type by age and the entire population's. The first is the occurrence of a pedal cyclist being most frequent for ages 9, 13, and 14. Pedal cyclist was not a most frequent fatality type for any age for the population. For the population, a motorcycle rider was the most frequent from ages 35 to 46, but for males it extends to the age 49 with a few more at 53 and 55, making it the second difference. Lastly, a car driver is mixed in as most frequent into the late 70s and through the early 90s. For the population, a car driver stopped around the age of 72. ";
   } else{
     fill = "mediumseagreen";
-    textFatalCountAge = textFatalCountAgeMale;
-    textFatalTypeAge = textFatalTypeAgeMale;
-    textFatalTypeCount = textFatalTypeCountMale;
+    textFatalCountAge = textFatalCountAgeAll;
+    textFatalTypeAge = textFatalTypeAgeAll;
+    textFatalTypeCount = textFatalTypeCountAll;
 
   }
   
