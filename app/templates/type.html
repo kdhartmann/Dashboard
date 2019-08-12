@@ -28,7 +28,8 @@
       margin-right: 40px;}
     .plot{
       margin-left: 30px;
-      margin-right: 30px;}
+      margin-right: 30px;
+      display:inline-block;}
     .title{
       font-size:12px;
       text-anchor: start;
@@ -50,32 +51,44 @@
     <br>
   </div>
   <!-- Fatal Count by Age text and graph 15%-->
-  <div class="text" style="width: 93%; height: 85px;">
-    <p id="textFatalCountAge"></p>
+  <div class="col-">
+    <div class="text" style="height: 85px;">
+      <p id="textFatalCountAge"></p>
+    </div>
   </div>
   <br>
-  <div class="plot">
-    <svg id="fatalCountAge"></svg>
+  <div class="col-" style='text-align: center'>
+    <div class="plot">
+      <svg id="fatalCountAge"></svg>
+    </div>
   </div>
   <br>
   <br>
   <!-- Fatal Type by Count text and graph -->
-  <div class="text" style="width: 93%; height: 70px;">
-    <p id="textFatalTypeCount"></p>
+  <div class="col-">
+    <div class="text" style="height: 70px;">
+      <p id="textFatalTypeCount"></p>
+    </div>
   </div>
   <br>
-  <div class="plot">
-    <svg id="fatalTypeCount"></svg>
+  <div class="col-" style='text-align: center'>
+    <div class="plot">
+      <svg id="fatalTypeCount"></svg>
+    </div>
   </div>
   <br>
   <br>
   <!-- Fatal Type by Age text and graph -->
-  <div class="text" style="width: 93%; height: 75px;">
-    <p id="textFatalTypeAge"></p>
+  <div class="col-">
+    <div class="text" style="height: 75px;">
+      <p id="textFatalTypeAge"></p>
+    </div>
   </div>
   <br>
-  <div class="plot">
-    <svg id="fatalTypeAge"></svg>
+  <div class="col-" style='text-align: center'>
+    <div class="plot">
+      <svg id="fatalTypeAge"></svg>
+    </div>
   </div>
   <br>
   <br>

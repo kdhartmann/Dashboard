@@ -1,7 +1,7 @@
 // Constants
 const margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = 500 - margin.left - margin.right,
-    height = 250 - margin.top - margin.bottom;
+    width = 600 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
 const tooltip = d3.select("body").append("div").attr("class", "toolTip");
 const tooltipLeftPadding = 50;
 const tooltipTopPadding = 70;
@@ -12,10 +12,14 @@ const lineFatalitiesLabel = "Total Fatalities";
 const lineCasualtiesLabelX = width-57;
 const lineFatalitiesLabelX = width-50;
 //Y position for the line labels 
-const lineCasualtiesLabelHourlyY = 35;
-const lineFatalitiesLabelHourlyY = 105;
+// const lineCasualtiesLabelHourlyY = 35;
+// const lineFatalitiesLabelHourlyY = 105;
+// const lineCasualtiesLabelMonthlyY = 0;
+// const lineFatalitiesLabelMonthlyY = 80;
+const lineCasualtiesLabelHourlyY = 45;
+const lineFatalitiesLabelHourlyY = 135;
 const lineCasualtiesLabelMonthlyY = 0;
-const lineFatalitiesLabelMonthlyY = 80;
+const lineFatalitiesLabelMonthlyY = 100;
 // plot titles
 const svgHourlyTitle = "Total Number of Casualties and Fatalities by Hour of Day";
 const svgMonthlyTitle = "Total Number of Casualties and Fatalities by Month";
